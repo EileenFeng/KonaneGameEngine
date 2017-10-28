@@ -113,6 +113,7 @@ class Board:
 		# check if user input moves are legal
 	def isLegalMove(self, turn, moves):
 		cur = moves[0]
+
 		#print "check legal moves", cur, self.matrix[cur[0]][cur[1]]
 		if(self.matrix[cur[0]][cur[1]] != turn):
 			return False
@@ -162,6 +163,7 @@ class Board:
 		result = self.isLegalMove(turn, moves)
 		if (result == False):
 			self.matrix = temp
+			print("invalid move")
 		'''print result
 		if (result):
 			#print "user moves", moves, "are made"

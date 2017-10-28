@@ -1,6 +1,7 @@
 from Board import Board
 from minimaxTree import *
 from miniMax import *
+from miniMaxPruning import *
 from players import player
 
 def main():
@@ -35,7 +36,8 @@ def main():
 				moves.append((int(inputs[i-1]), int(inputs[i])))
 		#print moves
 		board.updateBoard(user, moves)
-		result = miniMax(board, evalFunc, computer)
+		board.displayBoard()
+		result = miniMaxPruning(board, evalFunc, computer)
 		print(result)
 		board.updateBoard(computer, result)
 		board.displayBoard()

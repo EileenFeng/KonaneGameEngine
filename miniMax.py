@@ -2,7 +2,7 @@ from minimaxTree import *
 from Board import Board
 import copy
 
-_DEPTH = 6
+_DEPTH = 3
 
 def evalFunc(turn, board):
 	opponent = 'X'
@@ -13,10 +13,10 @@ def evalFunc(turn, board):
 def miniMax(board, evalFunc, turn):
 	root = Node((-1, -1), None, list(), -1)
 	currentBoard = copy.deepcopy(board)
-	miniMaxHelper(_DEPTH, board, evalFunc, root, turn)
+	miniMaxHelper(_DEPTH, currentBoard, evalFunc, root, turn)
 	print("Best child index: ", root.bestChildIndex)
-	#if (root.bestChildIndex == -1):
-	#	return (-1, -1)
+	if (root.bestChildIndex == -1):
+		return (-1, -1)
 	return root.childList[root.bestChildIndex].name
 
 def miniMaxHelper(depth, board, evalFunc, node, turn):
@@ -64,4 +64,3 @@ def miniMaxHelper(depth, board, evalFunc, node, turn):
 			else:
 				node.value = 999
 			node.bestChildIndex = -1
-

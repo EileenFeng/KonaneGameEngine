@@ -1,5 +1,6 @@
 from Board import Board
 from minimaxTree import *
+from miniMax import *
 from players import player
 
 def main():
@@ -22,11 +23,8 @@ def main():
 				moves.append((int(inputs[i-1]), int(inputs[i])))
 		#print moves
 		board.updateBoard(user, moves)
-		#resultX = board.legalMoveList('X')
-		#resultO = board.legalMoveList('O')
-		#print "X", resultX
-		#print "O", resultO
-		result = board.legalMoveList(computer)
-		board.updateBoard(computer, result[0])
-		print("Computer moved: ", result[0])
+		result = miniMax(board, evalFunc, computer)
+		print(result)
+		board.updateBoard(computer, result)
+		print("Computer moved: ", result)
 main()

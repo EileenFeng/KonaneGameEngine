@@ -126,7 +126,7 @@ class Board:
 			#moving
 			index = 0
 			while (index + 1 < len(moves)):
-				curMove = moves[index]
+				cur = moves[index]
 				nex = moves[index + 1]
 				curRow = cur[0]
 				curCol = cur[1]
@@ -155,6 +155,7 @@ class Board:
 				else:
 					return False
 				index += 1
+
 				return True
 
 	def updateBoard(self, turn, moves):

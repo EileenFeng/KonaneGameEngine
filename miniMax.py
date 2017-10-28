@@ -1,14 +1,21 @@
 from minimaxTree import *
 from Board import Board
+import copy
 
 _DEPTH = 6
 
-def evalFunc(node):
+def evalFunc(turn, board):
+	opponent = 'X'
+	if (turn == 'X'):
+		opponent = 'O'
+	return (len(board.legalMoveList(turn)) - len(board.legalMoveList(opponent)))
 
-
-def miniMax(board, evalFunc, tree, turn):
-	root = maxNode((-1, -1), None, None, -1)
+def miniMax(board, evalFunc, turn):
+	root = Node((-1, -1), None, list(), -1)
+	currentBoard = copy.deepcopy(board)
 	miniMaxHelper(_DEPTH, board, evalFunc, root, turn)
+	board = currentBoard
+	return root.childList[root.bestChildIndex].name
 
 def miniMaxHelper(depth, board, evalFunc, node, turn):
 	isMax = False
@@ -18,29 +25,37 @@ def miniMaxHelper(depth, board, evalFunc, node, turn):
 		value = 999
 
 	if (depth == 0):
-		node.value = evalFunc(node)
+		node.value = evalFunc(turn, board)
 		return
 
 	else:
-		children = legalMoveList(turn)
-		for (move in children):
-			newChildNode = Node(move, node, None, value)
-			node.insertChild(newChildNode)
-			miniMaxHelper(depth-1, board, evalFunc, newChildNode, turn)
+		children = board.legalMoveList(turn)
+		if(len(children) > 0):
+			for move in children:
+				newChildNode = Node(move, node, list(), value)
+				node.insertChild(newChildNode)
+				currentBoard = copy.deepcopy(board)
+				miniMaxHelper(depth-1, currentBoard, evalFunc, newChildNode, turn)
 
-		bestChild = -1
-		compareValue = value
-		currentIndex = 0
-		for (child in node.childList):
-			if (isMax):
-				if (child.value > compareValue):
-					compareValue = child.value
-					bestChild = currentIndex
+			bestChild = -1
+			compareValue = value
+			currentIndex = 0
+			for child in node.childList:
+				if (isMax):
+					if (child.value > compareValue):
+						compareValue = child.value
+						bestChild = currentIndex
+				else:
+					if (child.value < compareValue):
+						compareValue = child.value
+						bestChild = currentIndex
+				currentIndex+=1
+			node.value = compareValue
+			node.bestChild = bestChild
+		else:
+			if(isMax):
+				node.value = -999
 			else:
-				if (child.value < compareValue):
-					compareValue = child.value
-					bestChild = currentIndex
-			currentIndex++
-		node.value = compareValue
-		node.bestChild = bestChild
+				node.value = 999
+			node.bestChild = -1
 

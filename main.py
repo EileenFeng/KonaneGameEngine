@@ -38,5 +38,6 @@ def main():
 		result = miniMax(board, evalFunc, computer)
 		print(result)
 		board.updateBoard(computer, result)
+		board.displayBoard()
 		print("Computer moved: ", result)
 main()

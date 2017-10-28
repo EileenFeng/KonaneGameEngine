@@ -159,12 +159,13 @@ class Board:
 
 	def updateBoard(self, turn, moves):
 		result = self.isLegalMove(turn, moves)
-		print result
+		'''print result
 		if (result):
-			print "user moves", moves, "are made"
+			#print "user moves", moves, "are made"
 			self.displayBoard()
 			return self
 		else:
 			print "user input moves are invalid"
 			self.displayBoard()
 			return self
+		'''

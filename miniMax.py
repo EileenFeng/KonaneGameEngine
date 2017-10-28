@@ -14,15 +14,18 @@ def miniMax(board, evalFunc, turn):
 	root = Node((-1, -1), None, list(), -1)
 	currentBoard = copy.deepcopy(board)
 	miniMaxHelper(_DEPTH, board, evalFunc, root, turn)
-	board = currentBoard
+	print(root.bestChildIndex)
+	print root.childList[-1].name
+	#if (root.bestChildIndex == -1):
+	#	return (-1, -1)
 	return root.childList[root.bestChildIndex].name
 
 def miniMaxHelper(depth, board, evalFunc, node, turn):
 	isMax = False
-	value = -999
+	value = 999
 	if (_DEPTH % 2 == depth % 2):
 		isMax = True
-		value = 999
+		value = -999
 
 	if (depth == 0):
 		node.value = evalFunc(turn, board)
@@ -51,11 +54,12 @@ def miniMaxHelper(depth, board, evalFunc, node, turn):
 						bestChild = currentIndex
 				currentIndex+=1
 			node.value = compareValue
-			node.bestChild = bestChild
+			node.bestChildIndex = bestChild
+			print("Changing ", node.name, " bestChild")
 		else:
 			if(isMax):
 				node.value = -999
 			else:
 				node.value = 999
-			node.bestChild = -1
+			node.bestChildIndex = -1
 

@@ -7,12 +7,9 @@ class Node:
 		self.childList = childList
 		self.bestChildIndex = -1
 		self.value = value 
-		
+
 	def insertChild(self, node):
 		self.childList.append(node)
 
 	def setParent(self, minNode):
 		self.minParent = minNode
-
-	def getValue(self):
-		return self.value

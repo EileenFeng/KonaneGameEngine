@@ -16,24 +16,23 @@ class Board:
 				else:
 					current = 'X'
 
-	#returns (-1, -1) if illegal move, otherwise returns move with right coords
-	def convertMove(self, row, col):
-		if (row < 1 or col < 1 or row > 8 or col > 8):
-			return (-1, -1)
-		return (row-1, col-1)
-
+	def noMoveTesting(self):
+		for i in range (1, 9):
+			for j in range (1, 9):
+				self.matrix[i][j] = '.'
 
 	def displayBoard(self):
+		sys.stdout.write("   ")
 		for i  in range(1, 9):
-			sys.stdout.write(" ")
 			sys.stdout.write (str(i))
-		print " "
+			sys.stdout.write(" ")
+		print("\n")
 		for i in range (1, 9):
+			sys.stdout.write(str(i) + " ")
 			for j in range (1, 9):
 				sys.stdout.write(" ")
 				sys.stdout.write (self.matrix[i][j])
-			print "", i
-		print " "
+			print " "
 
 	def getLegalMoves(self, turn, pos_x, pos_y):
 		legalMoves = []  

@@ -2,7 +2,7 @@ from minimaxTree import *
 from Board import Board
 import copy
 
-_DEPTH = 6
+_DEPTH = None
 inf = float("inf")
 
 def evalFunc(turn, board):
@@ -12,12 +12,14 @@ def evalFunc(turn, board):
 	return (len(board.legalMoveList(turn)) - len(board.legalMoveList(opponent)))
 
 def miniMax(board, evalFunc, turn):
+	global _DEPTH, inf
 	root = Node(-1, None, list(), -1)
 	currentBoard = copy.deepcopy(board)
 	(cbv, bm) = miniMaxHelper(_DEPTH, currentBoard, evalFunc, root, turn)
 	return bm
 
 def miniMaxHelper(depth, board, evalFunc, node, turn):
+	global _DEPTH, inf
 	isMax = False
 	value = inf
 	if (_DEPTH % 2 == depth % 2):

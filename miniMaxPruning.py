@@ -2,7 +2,7 @@ from minimaxTree import *
 from Board import Board
 import copy
 
-_DEPTH = 6
+_DEPTH = None
 evals = 0
 cutoffs = 0
 bn = 0
@@ -16,6 +16,7 @@ def evalFunc(turn, board):
 	return (len(board.legalMoveList(turn)) - len(board.legalMoveList(opponent)))
 
 def miniMaxPruning(board, evalFunc, turn, depth):
+	global _DEPTH, evals, cutoffs, bn, bd, inf
 	_DEPTH = depth
 	root = Node(-1, None, list(), -1)
 	currentBoard = copy.deepcopy(board)
@@ -23,7 +24,7 @@ def miniMaxPruning(board, evalFunc, turn, depth):
 	return bestMove
 
 def miniMaxPruningHelper(depth, board, evalFunc, node, turn, alpha, beta):
-	global evals, cutoffs, bn, bd
+	global _DEPTH, evals, cutoffs, bn, bd, inf
 	isMax = False
 	if (_DEPTH % 2 == depth % 2):
 		isMax = True

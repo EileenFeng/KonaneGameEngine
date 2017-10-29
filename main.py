@@ -3,6 +3,7 @@ from minimaxTree import *
 from miniMax import *
 from miniMaxPruning import *
 import time
+import random
 
 def testComputer():
 	depthOne = -1
@@ -51,8 +52,6 @@ def testComputer():
 		
 def testUser():
 	board = Board()
-	board.remove(4, 5)
-	board.remove(4, 4)
 	print "Current board is: "
 	board.displayBoard()
 	userScore = 0
@@ -68,10 +67,55 @@ def testUser():
 			inUserInput = False
 		else:
 			print("Invalid user's choice!")
+
+	while (True):
+		userMoveFirst = False
+		computerMoveFirst = False
+		firstMove = raw_input("Enter 0 to move first, 1 to let computer move first: ")
+		if (firstMove == "0"):
+			userMoveFirst = True
+			break
+		elif (firstMove == "1"):
+			computerMoveFirst = True
+			break
+		else:
+			print "Invalid input!"
+
+	while (userMoveFirst):
+		removeChoice = raw_input("Please remove one piece in the center or on the side by entering your move coordinates without spaces, for instance, enter 55 to remove piece (5, 5): ")
+		removeInt = 0
+		try:
+			removeInt = int(removeChoice)
+			if ((removeInt/10, removeInt%10) in board.getRemovableSet()):
+				board.removeFromInput(removeInt)
+				break
+			else:
+				print "Not in the center or on the side!"
+		except:
+			print "Invalid input!"
+
+	if (computerMoveFirst):
+		computerRemove = random.sample(board.getRemovableSet(), 1)[0]
+		board.remove(computerRemove[0], computerRemove[1])
+		print "Computer removed: ", computerRemove
+		board.displayBoard()
+		while (True):
+			userRemove = raw_input("Please remove one piece adjacent to computer's remove piece, by entering your move coordinates without spaces, for instance, enter 55 to remove piece (5, 5): ")
+			try:
+				removeInt = int(userRemove)
+				if (board.validRemoveAfterComputer(computerRemove, removeInt)):
+					board.remove(removeInt/10, removeInt%10)
+					board.displayBoard()
+					break
+				else:
+					print "Invalid coordinates!"
+			except:
+				print "Invalid input!"
+
 	while (True):
 		inMoveInput = True
 		while (inMoveInput):
-			print "Please make your move by entering your move coordinates without spaces, for instance, from (4, 2) to (4, 4), enter 4244"
+			print "Please make your move by entering your move coordinates without spaces, for instance, from (4, 2) to (4, 4), enter 4244."
 			inputs = raw_input("User's turn: ")
 			try:
 				moves = []

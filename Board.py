@@ -1,5 +1,8 @@
 import sys
 import copy
+import random
+from sets import Set
+
 class Board:
 	def __init__(self):
 		self.matrix = [['' for x in range(9)] for y in range(9)]
@@ -33,6 +36,7 @@ class Board:
 				sys.stdout.write(" ")
 				sys.stdout.write (self.matrix[i][j])
 			print " "
+		print ""
 
 	def getLegalMoves(self, turn, pos_x, pos_y):
 		legalMoves = []  
@@ -107,8 +111,43 @@ class Board:
 						result += self.getLegalMoves(turn, i, j)
 		return result
 
+	def getRemovableSet(self):
+		removables = Set([(4, 4), (5, 4), (5, 5), (4, 5)])
+		for i in range (1, 9):
+			removables.add((1, i))
+			removables.add((8, i))
+			removables.add((i, 1))
+			removables.add((i, 8))
+		return removables
+
+	def getPossibleRemoves(self, row, column):
+		possibleRemoves = []
+		for i in range (row-1, row+2):
+			if (i > 0 and i < 9 and i != row):
+				possibleRemoves.append((i, column))
+		for i in range (column-1, column+2):
+			if (i > 0 and i < 9 and i != column):
+				possibleRemoves.append((row, i))
+		return possibleRemoves
+
 	def remove(self, pos_x, pos_y):
 		self.matrix[pos_x][pos_y] = '.'
+
+	def validRemoveAfterComputer(self, computerRemove, userRemove):
+		if (userRemove not in range (11, 89)):
+			return False
+		possibleRemoves = self.getPossibleRemoves(computerRemove[0], computerRemove[1])
+		return ((userRemove / 10, userRemove % 10) in possibleRemoves)
+
+	def removeFromInput(self, removeInput):
+		row = removeInput / 10
+		column = removeInput % 10
+		self.remove(row, column)
+		possibleRemoves = self.getPossibleRemoves(row, column)
+		index = random.randint(0, len(possibleRemoves))
+		self.remove(possibleRemoves[index][0], possibleRemoves[index][1])
+		print "Computer removed ", possibleRemoves[index]
+		self.displayBoard()
 
 		# check if user input moves are legal
 	def isLegalMove(self, turn, moves):
@@ -144,7 +183,7 @@ class Board:
 					if (abs(curRow-nextRow) == 2):
 						if ((self.matrix[curRow][curCol] == turn) and (self.matrix[nextRow][nextCol] == '.') and (self.matrix[(curRow+nextRow)/2][curCol] != turn) and (self.matrix[(curRow+nextRow)/2][curCol] != '.')):
 							self.matrix[curRow][curCol] = '.'
-							self.matrix[(curRow+nextRow)/2][curCol] = '.'
+							self.matrix[abs(curRow+nextRow)/2][curCol] = '.'
 							self.matrix[nextRow][nextCol] = turn
 						else:
 							return False
@@ -153,8 +192,7 @@ class Board:
 				else:
 					return False
 				index += 1
-
-				return True
+			return True
 
 	def updateBoard(self, turn, moves):
 		temp = copy.deepcopy(self.matrix)

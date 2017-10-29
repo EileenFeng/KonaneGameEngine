@@ -3,6 +3,7 @@ from Board import Board
 import copy
 
 _DEPTH = 6
+inf = float("inf")
 
 def evalFunc(turn, board):
 	opponent = 'X'
@@ -11,17 +12,17 @@ def evalFunc(turn, board):
 	return (len(board.legalMoveList(turn)) - len(board.legalMoveList(opponent)))
 
 def miniMax(board, evalFunc, turn):
-	root = Node((-1, -1), None, list(), -1)
+	root = Node(-1, None, list(), -1)
 	currentBoard = copy.deepcopy(board)
 	(cbv, bm) = miniMaxHelper(_DEPTH, currentBoard, evalFunc, root, turn)
 	return bm
 
 def miniMaxHelper(depth, board, evalFunc, node, turn):
 	isMax = False
-	value = 999
+	value = inf
 	if (_DEPTH % 2 == depth % 2):
 		isMax = True
-		value = -999
+		value = -inf
 
 	if (depth == 0):
 		node.value = evalFunc(turn, board)
@@ -31,8 +32,8 @@ def miniMaxHelper(depth, board, evalFunc, node, turn):
 		children = board.legalMoveList(turn)
 		if(len(children) > 0):
 			if(isMax): 
-				cbv = -999
-				bestMove = (-1, -1)
+				cbv = -inf
+				bestMove = -1
 				for move in children:
 					newChildNode = Node(move, node, list(), value)
 					node.insertChild(newChildNode)
@@ -44,8 +45,8 @@ def miniMaxHelper(depth, board, evalFunc, node, turn):
 						bestMove = newChildNode.name
 				return (cbv, bestMove)
 			else: 
-				cbv = 999
-				bestMove = (-1, -1)
+				cbv = inf
+				bestMove = -1
 				for move in children:
 					newChildNode = Node(move, node, list(), value)
 					node.insertChild(newChildNode)
@@ -58,7 +59,4 @@ def miniMaxHelper(depth, board, evalFunc, node, turn):
 				return (cbv, bestMove)
 
 		else:
-			if(isMax):
-				return (-999, (-1, -1))
-			else:
-				return (-999, (-1, -1))
+			return(None, -1)

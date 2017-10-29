@@ -1,7 +1,7 @@
 import sys
 import copy
 class Board:
-	def __init__(self, matrix):
+	def __init__(self):
 		self.matrix = [['' for x in range(9)] for y in range(9)]
 		current = 'X'
 		for i in range (1, 9):

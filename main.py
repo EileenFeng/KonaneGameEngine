@@ -2,10 +2,42 @@ from Board import Board
 from minimaxTree import *
 from miniMax import *
 from miniMaxPruning import *
+import time
+
+def testComputer():
+	computerOne = 'X'
+	computerTwo = 'O'
+	board = Board()
+	board.remove(4, 5)
+	board.remove(4, 4)
+	while (True):
+		start = time.time()
+		moveOne = miniMaxPruning(board, evalFunc, computerOne, 5)
+		period = time.time() - start
+		if (moveOne == -1):
+			print("Computer 2 wins!")
+			break
+		board.updateBoard(computerOne, moveOne)
+		print "Computer 1 moved: ", moveOne
+		print "Calculation took ", period, " seconds to run."
+		board.displayBoard()
+		print ""
+		
+		start = time.time()
+		moveTwo = miniMaxPruning(board, evalFunc, computerTwo, 6)
+		period = time.time() - start
+		if (moveTwo == -1):
+			print("Computer 1 wins!")
+			break
+		board.updateBoard(computerTwo, moveTwo)
+		print "Computer 2 moved: ", moveTwo
+		print "Calculation took ", period, " seconds to run."
+		board.displayBoard()
+		print ""
+		
 
 def main():
-	l = [[]]
-	board = Board(l)
+	board = Board()
 	board.remove(4, 5)
 	board.remove(4, 4)
 	print "Current board is: "
@@ -24,28 +56,26 @@ def main():
 		else:
 			print("Invalid user's choice!")
 	while (True):
-		print "Please make your move by entering your move coordinates without spaces, for instance, from (4, 2) to (4, 4), enter 4244"
-		inputs = raw_input("User's turn: ")
-		moves = []
-		for i in range (0, len(inputs)):
-			if (i > 0 and i % 2 == 1):
-				moves.append((int(inputs[i-1]), int(inputs[i])))
-		#print moves
-		temp = board.updateBoard(user, moves)
-		while (temp == False):
-			print "Please make your move by entering your move coordinates without spaces"
+		inMoveInput = True
+		while (inMoveInput):
+			print "Please make your move by entering your move coordinates without spaces, for instance, from (4, 2) to (4, 4), enter 4244"
 			inputs = raw_input("User's turn: ")
-			moves = []
-			for i in range (0, len(inputs)):
-				if (i > 0 and i % 2 == 1):
-					moves.append((int(inputs[i-1]), int(inputs[i])))
-					temp = board.updateBoard(user, moves)
+			try:
+				moves = []
+				for i in range (0, len(inputs)):
+					if (i > 0 and i % 2 == 1):
+						moves.append((int(inputs[i-1]), int(inputs[i])))
+				inMoveInput = board.updateBoard(user, moves)
+			except:
+				print "Invalid user input!"
+				continue
+
 		userScore += len(moves) - 1
 		print "User moved: ", moves
 		print " "
 		board.displayBoard()
-		result = miniMaxPruning(board, evalFunc, computer)
-		if (result == (-1, -1)):
+		result = miniMaxPruning(board, evalFunc, computer, 6)
+		if (result == -1):
 			print "Computer Lost!"
 		else:
 			board.updateBoard(computer, result)
@@ -61,4 +91,5 @@ def main():
 		print "User Score is: ", userScore
 		print "Computer Score is: ", computerScore
 		print " "
-main()
+#main()
+testComputer()

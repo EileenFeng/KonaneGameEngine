@@ -7,7 +7,7 @@ evals = 0
 cutoffs = 0
 bn = 0
 bd = 0
-
+inf = float("inf")
 
 def evalFunc(turn, board):
 	opponent = 'X'
@@ -15,10 +15,11 @@ def evalFunc(turn, board):
 		opponent = 'O'
 	return (len(board.legalMoveList(turn)) - len(board.legalMoveList(opponent)))
 
-def miniMaxPruning(board, evalFunc, turn):
-	root = Node((-1, -1), None, list(), -1)
+def miniMaxPruning(board, evalFunc, turn, depth):
+	_DEPTH = depth
+	root = Node(-1, None, list(), -1)
 	currentBoard = copy.deepcopy(board)
-	(bestValue, bestMove) = miniMaxPruningHelper(_DEPTH, currentBoard, evalFunc, root, turn, -999, 999)
+	(bestValue, bestMove) = miniMaxPruningHelper(_DEPTH, currentBoard, evalFunc, root, turn, -inf, inf)
 	return bestMove
 
 def miniMaxPruningHelper(depth, board, evalFunc, node, turn, alpha, beta):
@@ -41,7 +42,7 @@ def miniMaxPruningHelper(depth, board, evalFunc, node, turn, alpha, beta):
 				newChildNode = Node(move, node, list(), 0)
 				node.insertChild(newChildNode)
 
-			bestMove = (-1, -1)
+			bestMove = -1
 			if (isMax):
 				for child in node.childList:
 					currentBoard = copy.deepcopy(board)
@@ -67,10 +68,7 @@ def miniMaxPruningHelper(depth, board, evalFunc, node, turn, alpha, beta):
 						return (alpha, bestMove)
 				return (beta, bestMove)
 		else:
-			if(isMax):
-				return (-999, (-1, -1))
-			else:
-				return (-999, (-1, -1))
+			return(None, -1)
 
 
 def feedBack():

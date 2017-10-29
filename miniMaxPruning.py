@@ -43,13 +43,13 @@ def miniMaxPruningHelper(depth, board, evalFunc, node, turn, alpha, beta):
 				newChildNode = Node(move, node, list(), 0)
 				node.insertChild(newChildNode)
 
-			bestMove = -1
+			bestMove = None
 			if (isMax):
 				for child in node.childList:
 					currentBoard = copy.deepcopy(board)
 					currentBoard.updateBoard(turn, child.name)
 					(bestValue, move) = miniMaxPruningHelper(depth-1, currentBoard, evalFunc, child, turn, alpha, beta)
-					if (bestValue > alpha):
+					if (bestValue >= alpha):
 						alpha = bestValue
 						bestMove = child.name
 					if (alpha >= beta):
@@ -61,7 +61,7 @@ def miniMaxPruningHelper(depth, board, evalFunc, node, turn, alpha, beta):
 					currentBoard = copy.deepcopy(board)
 					currentBoard.updateBoard(turn, child.name)
 					(bestValue, move) = miniMaxPruningHelper(depth-1, currentBoard, evalFunc, child, turn, alpha, beta)
-					if (bestValue < beta):
+					if (bestValue <= beta):
 						beta = bestValue
 						bestMove = child.name
 					if (beta <= alpha):
@@ -69,7 +69,10 @@ def miniMaxPruningHelper(depth, board, evalFunc, node, turn, alpha, beta):
 						return (alpha, bestMove)
 				return (beta, bestMove)
 		else:
-			return(None, -1)
+			if (isMax):
+				return(-inf, -1)
+			else:
+				return(inf, -1)
 
 
 def feedBack():

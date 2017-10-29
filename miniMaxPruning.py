@@ -13,7 +13,16 @@ def evalFunc(turn, board):
 	opponent = 'X'
 	if (turn == 'X'):
 		opponent = 'O'
-	return (len(board.legalMoveList(turn)) - len(board.legalMoveList(opponent)))
+	turnScore = 0
+	opponentScore = 0
+	turnList = board.legalMoveList(turn)
+	opponentList = board.legalMoveList(opponent)
+	for move in turnList:
+		turnScore += (len(move)-1)
+	for move in opponentList:
+		opponentScore += (len(move)-1)
+	#return ((turnScore+1) / (opponentScore+1))
+	return (turnScore - opponentScore)
 
 def miniMaxPruning(board, evalFunc, turn, depth):
 	global _DEPTH, evals, cutoffs, bn, bd, inf

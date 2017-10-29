@@ -23,8 +23,8 @@ def testComputer():
 	computerOne = 'X'
 	computerTwo = 'O'
 	board = Board()
-	board.remove(4, 5)
-	board.remove(4, 4)
+	board.remove(1, 6)
+	board.remove(1, 7)
 	while (True):
 		start = time.time()
 		moveOne = miniMaxPruning(board, evalFunc, computerOne, depthOne)

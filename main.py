@@ -35,7 +35,6 @@ def testComputer():
 		board.displayBoard()
 		print ""
 		
-
 def main():
 	board = Board()
 	board.remove(4, 5)
@@ -65,7 +64,8 @@ def main():
 				for i in range (0, len(inputs)):
 					if (i > 0 and i % 2 == 1):
 						moves.append((int(inputs[i-1]), int(inputs[i])))
-				inMoveInput = board.updateBoard(user, moves)
+				if (board.updateBoard(user, moves) == True):
+					inMoveInput = False
 			except:
 				print "Invalid user input!"
 				continue
@@ -74,7 +74,9 @@ def main():
 		print "User moved: ", moves
 		print " "
 		board.displayBoard()
+		start = time.time()
 		result = miniMaxPruning(board, evalFunc, computer, 6)
+		period = time.time() - start
 		if (result == -1):
 			print "Computer Lost!"
 		else:
@@ -82,6 +84,7 @@ def main():
 		computerScore += len(result) - 1
 		print " "
 		print "Computer moved: ", result
+		print "Calculation took ", period, " seconds to run."
 		print " "
 		board.displayBoard()
 		print " "
@@ -91,5 +94,5 @@ def main():
 		print "User Score is: ", userScore
 		print "Computer Score is: ", computerScore
 		print " "
-#main()
-testComputer()
+main()
+#testComputer()

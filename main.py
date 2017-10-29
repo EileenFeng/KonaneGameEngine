@@ -5,6 +5,20 @@ from miniMaxPruning import *
 import time
 
 def testComputer():
+	depthOne = -1
+	depthTwo = -1
+	while (True):
+		depthOneStr = raw_input("Computer 1 is X. Please enter choice of depth for Computer 1: ")
+		depthTwoStr = raw_input("Computer 2 is O. Please enter choice of depth for Computer 2: ")
+
+		try:
+			depthOne = int(depthOneStr)
+			depthTwo = int(depthTwoStr)
+			break
+		except:
+			print "Wrong depth input!"
+			continue
+
 	computerOne = 'X'
 	computerTwo = 'O'
 	board = Board()
@@ -12,7 +26,7 @@ def testComputer():
 	board.remove(4, 4)
 	while (True):
 		start = time.time()
-		moveOne = miniMaxPruning(board, evalFunc, computerOne, 5)
+		moveOne = miniMaxPruning(board, evalFunc, computerOne, depthOne)
 		period = time.time() - start
 		if (moveOne == -1):
 			print("Computer 2 wins!")
@@ -24,7 +38,7 @@ def testComputer():
 		print ""
 		
 		start = time.time()
-		moveTwo = miniMaxPruning(board, evalFunc, computerTwo, 6)
+		moveTwo = miniMaxPruning(board, evalFunc, computerTwo, depthTwo)
 		period = time.time() - start
 		if (moveTwo == -1):
 			print("Computer 1 wins!")
@@ -35,7 +49,7 @@ def testComputer():
 		board.displayBoard()
 		print ""
 		
-def main():
+def testUser():
 	board = Board()
 	board.remove(4, 5)
 	board.remove(4, 4)
@@ -94,5 +108,17 @@ def main():
 		print "User Score is: ", userScore
 		print "Computer Score is: ", computerScore
 		print " "
+
+def main():
+	while (True):
+		userChoice = raw_input("Type 0 if you want to watch computers play, 1 if you want to play against a computer: ")
+		if (userChoice == "0"):
+			testComputer()
+			break
+		elif (userChoice == "1"):
+			testUser()
+			break
+		else:
+			print "Please enter 0 or 1!"
+
 main()
-#testComputer()

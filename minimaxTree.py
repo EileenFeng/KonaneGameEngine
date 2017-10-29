@@ -5,7 +5,6 @@ class Node:
 		self.name = name
 		self.parent = parent
 		self.childList = childList
-		self.bestChildIndex = -1
 		self.value = value 
 
 	def insertChild(self, node):

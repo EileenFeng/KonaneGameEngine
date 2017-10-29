@@ -23,7 +23,7 @@ class Board:
 
 	def displayBoard(self):
 		sys.stdout.write("   ")
-		for i  in range(1, 9):
+		for i in range(1, 9):
 			sys.stdout.write (str(i))
 			sys.stdout.write(" ")
 		print("\n")
@@ -113,8 +113,6 @@ class Board:
 		# check if user input moves are legal
 	def isLegalMove(self, turn, moves):
 		cur = moves[0]
-
-		#print "check legal moves", cur, self.matrix[cur[0]][cur[1]]
 		if(self.matrix[cur[0]][cur[1]] != turn):
 			return False
 
@@ -164,13 +162,6 @@ class Board:
 		if (result == False):
 			self.matrix = temp
 			print("invalid move")
-		'''print result
-		if (result):
-			#print "user moves", moves, "are made"
-			self.displayBoard()
-			return self
-		else:
-			print "user input moves are invalid"
-			self.displayBoard()
-			return self
-		'''
+			print("\n")
+		return result
+		

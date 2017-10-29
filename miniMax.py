@@ -2,7 +2,7 @@ from minimaxTree import *
 from Board import Board
 import copy
 
-_DEPTH = 3
+_DEPTH = 6
 
 def evalFunc(turn, board):
 	opponent = 'X'
@@ -13,11 +13,8 @@ def evalFunc(turn, board):
 def miniMax(board, evalFunc, turn):
 	root = Node((-1, -1), None, list(), -1)
 	currentBoard = copy.deepcopy(board)
-	miniMaxHelper(_DEPTH, currentBoard, evalFunc, root, turn)
-	print("Best child index: ", root.bestChildIndex)
-	if (root.bestChildIndex == -1):
-		return (-1, -1)
-	return root.childList[root.bestChildIndex].name
+	(cbv, bm) = miniMaxHelper(_DEPTH, currentBoard, evalFunc, root, turn)
+	return bm
 
 def miniMaxHelper(depth, board, evalFunc, node, turn):
 	isMax = False
@@ -28,39 +25,40 @@ def miniMaxHelper(depth, board, evalFunc, node, turn):
 
 	if (depth == 0):
 		node.value = evalFunc(turn, board)
-		return
+		return (node.value, node.name)
 
 	else:
 		children = board.legalMoveList(turn)
 		if(len(children) > 0):
-			for move in children:
-				newChildNode = Node(move, node, list(), value)
-				node.insertChild(newChildNode)
-				currentBoard = copy.deepcopy(board)
-				currentBoard.updateBoard(turn, move)
-				miniMaxHelper(depth-1, currentBoard, evalFunc, newChildNode, turn)
+			if(isMax): 
+				cbv = -999
+				bestMove = (-1, -1)
+				for move in children:
+					newChildNode = Node(move, node, list(), value)
+					node.insertChild(newChildNode)
+					currentBoard = copy.deepcopy(board)
+					currentBoard.updateBoard(turn, move)
+					(bv, bm) = miniMaxHelper(depth-1, currentBoard, evalFunc, newChildNode, turn)
+					if(bv > cbv):
+						cbv = bv
+						bestMove = newChildNode.name
+				return (cbv, bestMove)
+			else: 
+				cbv = 999
+				bestMove = (-1, -1)
+				for move in children:
+					newChildNode = Node(move, node, list(), value)
+					node.insertChild(newChildNode)
+					currentBoard = copy.deepcopy(board)
+					currentBoard.updateBoard(turn, move)
+					(bv, bm) = miniMaxHelper(depth-1, currentBoard, evalFunc, newChildNode, turn)
+					if(bv < cbv):
+						cbv = bv
+						bestMove = newChildNode.name
+				return (cbv, bestMove)
 
-			bestChild = -1
-			compareValue = value
-			currentIndex = 0
-
-			for child in node.childList:
-				#print(child.name)
-				if (isMax):
-					if (child.value > compareValue):
-						compareValue = child.value
-						bestChild = currentIndex
-				else:
-					if (child.value < compareValue):
-						compareValue = child.value
-						bestChild = currentIndex
-				currentIndex+=1
-			node.value = compareValue
-			node.bestChildIndex = bestChild
-			#print("Changing ", node.name, " bestChild to", bestChild, ", value: ", compareValue)
 		else:
 			if(isMax):
-				node.value = -999
+				return (-999, (-1, -1))
 			else:
-				node.value = 999
-			node.bestChildIndex = -1
+				return (-999, (-1, -1))

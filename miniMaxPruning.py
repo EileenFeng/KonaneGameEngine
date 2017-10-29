@@ -3,6 +3,11 @@ from Board import Board
 import copy
 
 _DEPTH = 6
+evals = 0
+cutoffs = 0
+bn = 0
+bd = 0
+
 
 def evalFunc(turn, board):
 	opponent = 'X'
@@ -12,58 +17,63 @@ def evalFunc(turn, board):
 
 def miniMaxPruning(board, evalFunc, turn):
 	root = Node((-1, -1), None, list(), -1)
-	#print("O's children: ", board.legalMoveList(turn))
 	currentBoard = copy.deepcopy(board)
 	(bestValue, bestMove) = miniMaxPruningHelper(_DEPTH, currentBoard, evalFunc, root, turn, -999, 999)
 	return bestMove
 
 def miniMaxPruningHelper(depth, board, evalFunc, node, turn, alpha, beta):
+	global evals, cutoffs, bn, bd
 	isMax = False
 	if (_DEPTH % 2 == depth % 2):
 		isMax = True
 
 	if (depth == 0):
+		node.value = evalFunc(turn, board)
+		evals += 1
 		return (node.value, node.name)
 
 	else:
 		children = board.legalMoveList(turn)
 		if(len(children) > 0):
-			#print("Expanding node ", node.name, " at level ", depth)
+			bn += len(children)
+			bd += 1
 			for move in children:
 				newChildNode = Node(move, node, list(), 0)
 				node.insertChild(newChildNode)
-				#print("Adding child ", move, "to ", node.name)
 
 			bestMove = (-1, -1)
 			if (isMax):
 				for child in node.childList:
 					currentBoard = copy.deepcopy(board)
 					currentBoard.updateBoard(turn, child.name)
-					bestValue, move = miniMaxPruningHelper(depth-1, currentBoard, evalFunc, child, turn, alpha, beta)
+					(bestValue, move) = miniMaxPruningHelper(depth-1, currentBoard, evalFunc, child, turn, alpha, beta)
 					if (bestValue > alpha):
 						alpha = bestValue
-						#print("setting bestMove to", move, " depth: ", depth)
 						bestMove = child.name
 					if (alpha >= beta):
+						cutoffs += 1
 						return (beta, bestMove)
 				return (alpha, bestMove)
 			else:
 				for child in node.childList:
 					currentBoard = copy.deepcopy(board)
 					currentBoard.updateBoard(turn, child.name)
-					bestValue, move = miniMaxPruningHelper(depth-1, currentBoard, evalFunc, child, turn, alpha, beta)
+					(bestValue, move) = miniMaxPruningHelper(depth-1, currentBoard, evalFunc, child, turn, alpha, beta)
 					if (bestValue < beta):
 						beta = bestValue
-						#print("setting bestMove to", move, " depth: ", depth)
 						bestMove = child.name
 					if (beta <= alpha):
+						cutoffs += 1
 						return (alpha, bestMove)
 				return (beta, bestMove)
-			#print("Changing ", node.name, " bestChild to", bestChild, ", value: ", compareValue)
 		else:
 			if(isMax):
-				node.value = -999
+				return (-999, (-1, -1))
 			else:
-				node.value = 999
-			node.bestChildIndex = -1
+				return (-999, (-1, -1))
 
+
+def feedBack():
+	print "Evaluation function was applied: ", evals, " times"
+	print "There are ", cutoffs, " cutoffs"
+	print "The average branching factor is: ", float(bn)/bd

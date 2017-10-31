@@ -5,12 +5,6 @@ import copy
 _DEPTH = None
 inf = float("inf")
 
-def evalFunc(turn, board):
-	opponent = 'X'
-	if (turn == 'X'):
-		opponent = 'O'
-	return (len(board.legalMoveList(turn)) - len(board.legalMoveList(opponent)))
-
 def miniMax(board, evalFunc, turn):
 	global _DEPTH, inf
 	root = Node(-1, None, list(), -1)

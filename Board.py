@@ -112,12 +112,7 @@ class Board:
 		return result
 
 	def getRemovableSet(self):
-		removables = Set([(4, 4), (5, 4), (5, 5), (4, 5)])
-		for i in range (1, 9):
-			removables.add((1, i))
-			removables.add((8, i))
-			removables.add((i, 1))
-			removables.add((i, 8))
+		removables = Set([(4, 4), (5, 4), (5, 5), (4, 5), (1, 8), (8, 1), (1, 1), (8, 8)])
 		return removables
 
 	def getPossibleRemoves(self, row, column):

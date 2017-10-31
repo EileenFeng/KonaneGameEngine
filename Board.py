@@ -111,10 +111,12 @@ class Board:
 						result += self.getLegalMoves(turn, i, j)
 		return result
 
-	def getRemovableSet(self):
-		removables = Set([(4, 4), (5, 4), (5, 5), (4, 5), (1, 8), (8, 1), (1, 1), (8, 8)])
-		return removables
-
+	def getRemovableSet(self, turn):
+		if (turn == 'X'):
+			return Set([(4, 4), (5, 5), (1, 1), (8, 8)])
+		else: 
+			return Set([(4, 5), (5, 4), (1, 8), (8, 1)])
+			
 	def getPossibleRemoves(self, row, column):
 		possibleRemoves = []
 		for i in range (row-1, row+2):

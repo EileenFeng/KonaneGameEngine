@@ -57,6 +57,8 @@ def testUser():
 	userScore = 0
 	computerScore = 0
 	inUserInput = True
+	user = ''
+	computer = ''
 	while (inUserInput):
 		user = raw_input("User's choice: please enter 'X' or 'O': ")
 		if (user == 'X'):
@@ -86,16 +88,16 @@ def testUser():
 		removeInt = 0
 		try:
 			removeInt = int(removeChoice)
-			if ((removeInt/10, removeInt%10) in board.getRemovableSet()):
+			if ((removeInt/10, removeInt%10) in board.getRemovableSet(user)):
 				board.removeFromInput(removeInt)
 				break
 			else:
-				print "Not in the center or on the side!"
+				print "Not in the center or the corner!"
 		except:
 			print "Invalid input!"
 
 	if (computerMoveFirst):
-		computerRemove = random.sample(board.getRemovableSet(), 1)[0]
+		computerRemove = random.sample(board.getRemovableSet(computer), 1)[0]
 		board.remove(computerRemove[0], computerRemove[1])
 		print "Computer removed: ", computerRemove
 		board.displayBoard()

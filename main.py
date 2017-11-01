@@ -23,8 +23,8 @@ def testComputer():
 	computerOne = 'X'
 	computerTwo = 'O'
 	board = Board()
-	board.remove(1, 1)
-	board.remove(1, 2)
+	board.remove(4, 5)
+	board.remove(5, 5)
 	while (True):
 		start = time.time()
 		moveOne = miniMaxPruning(board, evalFunc, computerOne, depthOne)
@@ -59,6 +59,8 @@ def testUser():
 	inUserInput = True
 	user = ''
 	computer = ''
+	computerWin = False;
+	userWin = False;
 	while (inUserInput):
 		user = raw_input("User's choice: please enter 'X' or 'O': ")
 		if (user == 'X'):
@@ -116,9 +118,34 @@ def testUser():
 
 	while (True):
 		inMoveInput = True
+		cMove = False;
+		if(computerMoveFirst):
+			cMove = True
+			computerMoveFirst = False
+		if (cMove):
+			cMove = False
+			start = time.time()
+			result = miniMaxPruning(board, evalFunc, computer, 6)
+			period = time.time() - start
+			if (result == -1):
+				print "Computer Lost!"
+				userWin = True
+			else:
+				board.updateBoard(computer, result)
+			computerScore += len(result) - 1
+			print " "
+			print "Computer moved: ", result
+			print "Calculation took ", period, " seconds to run."
+			print " "
+			board.displayBoard()
+			print " "
 		while (inMoveInput):
 			print "Please make your move by entering your move coordinates without spaces, for instance, from (4, 2) to (4, 4), enter 4244."
 			inputs = raw_input("User's turn: ")
+			if (inputs == "-1"):
+				print "Computer Wins!"
+				computerWin = True
+				break
 			try:
 				moves = []
 				for i in range (0, len(inputs)):
@@ -129,31 +156,32 @@ def testUser():
 			except:
 				print "Invalid user input!"
 				continue
-
-		userScore += len(moves) - 1
-		print "User moved: ", moves
-		print " "
-		board.displayBoard()
-		start = time.time()
-		result = miniMaxPruning(board, evalFunc, computer, 6)
-		period = time.time() - start
-		if (result == -1):
-			print "Computer Lost!"
-		else:
-			board.updateBoard(computer, result)
-		computerScore += len(result) - 1
-		print " "
-		print "Computer moved: ", result
-		print "Calculation took ", period, " seconds to run."
-		print " "
-		board.displayBoard()
-		print " "
-		feedBack()
-		# print score
-		print "Score Board: "
-		print "User Score is: ", userScore
-		print "Computer Score is: ", computerScore
-		print " "
+		if(inputs != "-1"):
+			userScore += len(moves) - 1
+			print "User moved: ", moves
+			print " "
+			board.displayBoard()
+			start = time.time()
+			result = miniMaxPruning(board, evalFunc, computer, 6)
+			period = time.time() - start
+			if (result == -1):
+				print "Computer Lost!"
+				break
+			else:
+				board.updateBoard(computer, result)
+			computerScore += len(result) - 1
+			print " "
+			print "Computer moved: ", result
+			print "Calculation took ", period, " seconds to run."
+			print " "
+			board.displayBoard()
+			print " "
+			feedBack()
+			# print score
+			print "Score Board: "
+			print "User Score is: ", userScore
+			print "Computer Score is: ", computerScore
+			print " "
 
 def main():
 	while (True):

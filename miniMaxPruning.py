@@ -6,7 +6,7 @@ _DEPTH = None
 evals = 0
 cutoffs = 0
 bn = 0
-bd = 0
+bd = 1
 inf = float("inf")
 
 def evalFunc(turn, board):
